@@ -1629,16 +1629,19 @@ def reportError(location, severity, message, addon, errorId, extra=''):
                 'addon': addon,
                 'errorId': errorId,
                 'extra': extra}
-        sys.stdout.write(json.dumps(msg) + '\n')
+        line = json.dumps(msg) + '\n'
+        sys.stdout.write(line)
     else:
         if is_suppressed(location, message, '%s-%s' % (addon, errorId)):
             return
         loc = '[%s:%i]' % (location.file, location.linenr)
         if len(extra) > 0:
             message += ' (' + extra + ')'
-        sys.stderr.write('%s (%s) %s [%s-%s]\n' % (loc, severity, message, addon, errorId))
+        line = '%s (%s) %s [%s-%s]\n' % (loc, severity, message, addon, errorId)
+        sys.stderr.write(line)
         global EXIT_CODE
         EXIT_CODE = 1
+    return line
 
 def reportSummary(dumpfile, summary_type, summary_data):
     # dumpfile ends with ".dump"
