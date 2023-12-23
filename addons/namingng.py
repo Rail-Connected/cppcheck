@@ -195,11 +195,15 @@ def process(dumpfiles, configfile, debugprint=False):
 
         # Check File naming
         if "RE_FILE" in conf and conf["RE_FILE"]:
-            source_file = data.files[0]
-            mockToken = DataStruct(source_file, "0", os.path.basename(source_file))
-            msgType = 'File name'
-            for exp in conf["RE_FILE"]:
-                evalExpr(conf["RE_FILE"], exp, mockToken, msgType)
+            for source_file in data.files:
+                basename = os.path.basename(source_file)
+                good = False
+                for exp in conf["RE_FILE"]:
+                    good |= bool(re.match(exp, source_file))
+                    good |= bool(re.match(exp, basename))
+                if not good:
+                    mockToken = DataStruct(source_file, 0, basename)
+                    reportNamingError(mockToken, 'File name ' + source_file + ' violates naming convention')
 
         # Check Namespace naming
         if "RE_NAMESPACE" in conf and conf["RE_NAMESPACE"]:
