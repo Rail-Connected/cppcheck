@@ -237,7 +237,7 @@ def process(dumpfiles, configfile, debugprint=False):
 
                         if conf["skip_one_char_variables"] and len(var.nameToken.str) == 1:
                             continue
-                        if varType in conf["var_prefixes"]:
+                        if varType in conf.get("var_prefixes",{}):
                             if not var.nameToken.str.startswith(conf["var_prefixes"][varType]):
                                 reportNamingError(var.typeStartToken,
                                                     'Variable ' +
@@ -294,7 +294,7 @@ def process(dumpfiles, configfile, debugprint=False):
                         if debugprint:
                             print("\t:: {} {}".format(retval, token.function.name))
 
-                        if retval and retval in conf["function_prefixes"]:
+                        if retval and retval in conf.get("function_prefixes",{}):
                             if not token.function.name.startswith(conf["function_prefixes"][retval]):
                                 reportNamingError(token, 'Function ' + token.function.name + ' violates naming convention')
                         mockToken = DataStruct(token.file, token.linenr, token.function.name)
