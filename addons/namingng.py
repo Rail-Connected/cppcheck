@@ -195,7 +195,8 @@ def process(dumpfiles, configfile, debugprint=False):
 
         # Check File naming
         if "RE_FILE" in conf and conf["RE_FILE"]:
-            mockToken = DataStruct(afile[:-5], "0", afile[afile.rfind('/') + 1:-5])
+            source_file = data.files[0]
+            mockToken = DataStruct(source_file, "0", os.path.basename(source_file))
             msgType = 'File name'
             for exp in conf["RE_FILE"]:
                 evalExpr(conf["RE_FILE"], exp, mockToken, msgType)
